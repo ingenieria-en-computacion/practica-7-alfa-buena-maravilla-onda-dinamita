@@ -7,7 +7,7 @@
 // ----------------------------
 // Macro para declarar estructuras y prototipos
 // ----------------------------
-#define DECLARE_LINKED_LIST(TYPE) \
+#define DECLARE_CIRCULAR_LIST(TYPE) \
     typedef struct Node_##TYPE { \
         TYPE data; \
         struct Node_##TYPE* next; \
@@ -76,9 +76,12 @@
         if (pos == 0) { \
             new_node->next = list->head; \
             list->head = new_node; \
-            if (!list->tail) list->tail = new_node; \
+            if (!list->tail){ \
+                list->tail = new_node; \
+                list->tail->next = list->head; \
+            } \
         } else if (pos == list->length) { \
-            new_node->next = NULL; \
+            new_node->next = list->head; \
             list->tail->next = new_node; \
             list->tail = new_node; \
         } else { \
@@ -220,15 +223,15 @@
 // ----------------------------
 // Declaración para tipos concretos
 // ----------------------------
-DECLARE_LINKED_LIST(int)
-DECLARE_LINKED_LIST(char)
-DECLARE_LINKED_LIST(float)
+DECLARE_CIRCULAR_LIST(int)
+DECLARE_CIRCULAR_LIST(char)
+DECLARE_CIRCULAR_LIST(float)
 
 // ----------------------------
 // Implementación para tipos concretos
 // ----------------------------
-#ifdef LINKED_LIST_IMPLEMENTATION
-IMPLEMENT_LINKED_LIST(int)
-IMPLEMENT_LINKED_LIST(char)
-IMPLEMENT_LINKED_LIST(float)
+#ifdef CIRCULAR_LIST_IMPLEMENTATION
+IMPLEMent_CIRCULAR_LIST(int)
+IMPLEMENT_CIRCULAR_LIST(char)
+IMPLEMENT_CIRCULAR_LIST(float)
 #endif
