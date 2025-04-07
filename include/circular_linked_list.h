@@ -203,39 +203,36 @@
         return false; \
     } \
     \
-    bool list_##TYPE##_remove(List_##TYPE* list, TYPE data) { \
-        if (!list) return false; \
-        \
-        Node_##TYPE* prev = NULL; \
-        Node_##TYPE* current = list->head; \
-        \
-        while (current) { \
-            if (current->data == data) { \
-                if (prev) { \
-                    prev->next = current->next; \
-                    if (!current->next) { \
-                        list->tail = prev; \
-                    } \
-                } else { \
-                    list->head = current->next; \
-                    if (!list->head) { \
-                        list->tail = NULL; \
-                    } \
-                } \
-                \
-                free(current); \
-                list->length--; \
-                return true; \
-            } \
-            \
-            if(current->next = list->head) return false; \
-            prev = current; \
-            current = current->next; \
-        } \
-        \
-        return false; \
+    bool list_##TYPE##_remove(List_##TYPE* list, TYPE data) {\
+        if (!list || !list->head) return false;\
+    \
+        Node_##TYPE* current = list->head;\
+        Node_##TYPE* prev = list->tail;\
+    \
+        do {\
+            if (current->data == data) {\
+                if (current == list->head) {\
+                    if (list->head == list->tail) {\
+                        list->head = list->tail = NULL;\
+                    } else {\
+                        list->head = current->next;\
+                        list->tail->next = list->head;\
+                    }\
+                } else {\
+                    prev->next = current->next;\
+                    if (current == list->tail) {\
+                        list->tail = prev;\
+                    }\
+                }\
+                free(current);\
+                list->length--;\
+                return true;\
+            }\
+            prev = current;\
+            current = current->next;\
+        } while (current != list->head);\
+        return false;\
     }
-
 // ----------------------------
 // Declaración para tipos concretos
 // ----------------------------
