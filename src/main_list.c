@@ -22,9 +22,17 @@ int main() {
     List_int* nums = list_int_create();
     list_int_append(nums, 10);
     list_int_append(nums, 20);
+    list_int_append(nums, 30);
+    list_int_append(nums, 40);
+    list_int_append(nums, 50);
     
     printf("Lista: ");
     list_int_print(nums, print_int); // Usar función concreta para evitar errores
+
+    list_int_remove_at(nums, 2);
+
+    printf("Lista: ");
+    list_int_print(nums, print_int);
     
     list_int_destroy(nums);
     
@@ -34,6 +42,11 @@ int main() {
     list_char_append(chars, 'c');
     list_char_append(chars, 'd');
     list_char_append(chars, 'e');
+
+    printf("Lista: ");
+    list_char_print(chars, print_char);
+
+    list_char_remove_at(chars, 3);
 
     printf("Lista: ");
     list_char_print(chars, print_char);
