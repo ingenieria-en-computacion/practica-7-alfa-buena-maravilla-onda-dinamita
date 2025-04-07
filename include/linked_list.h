@@ -28,7 +28,11 @@
     bool list_##TYPE##_remove_at(List_##TYPE* list, size_t pos); \
     bool list_##TYPE##_get(const List_##TYPE* list, size_t pos, TYPE* out); \
     size_t list_##TYPE##_length(const List_##TYPE* list); \
-    void list_##TYPE##_print(const List_##TYPE* list, void (*print_fn)(TYPE));
+    bool list_##TYPE##_is_empty(const List_##TYPE* list); \
+    void list_##TYPE##_clear(List_##TYPE* list); \
+    void list_##TYPE##_print(const List_##TYPE* list, void (*print_fn)(TYPE)); \
+    bool list_##TYPE##_contains(const List_##TYPE* list, TYPE data); \
+    bool list_##TYPE##_remove(List_##TYPE* list, TYPE data);
 
 // ----------------------------
 // Macro para implementación
