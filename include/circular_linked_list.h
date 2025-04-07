@@ -156,7 +156,10 @@
         if (!list) return; \
         \
         Node_##TYPE* current = list->head; \
-        while (current) { \
+        Node_##TYPE* temp = current; \
+        current = current->next; \
+        free(temp); \
+        while (current && current != list->head) { \
             Node_##TYPE* temp = current; \
             current = current->next; \
             free(temp); \
