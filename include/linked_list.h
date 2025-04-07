@@ -34,7 +34,7 @@
 // Macro para implementación
 // ----------------------------
 #define IMPLEMENT_LINKED_LIST(TYPE) \
-    Node_##TYPE* node_##TYPE##__create(TYPE data){\
+    Node_##TYPE* node_##TYPE##_create(TYPE data){\
         Node_##TYPE* new_node = malloc(sizeof(Node_##TYPE)); \
         new_node->data = data;\
         new_node->next = NULL;\
@@ -71,7 +71,7 @@
         if (!list || pos > list->length) return false; \
         \
         Node_##TYPE* new_node = node_##TYPE##_create(data); \
-        if (!new_node) return false; \        
+        if (!new_node) return false; \
         \
         if (pos == 0) { \
             new_node->next = list->head; \

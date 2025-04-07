@@ -12,7 +12,7 @@
         TYPE data; \
         struct Node_##TYPE* next; \
     } Node_##TYPE; \
-    Node_##TYPE* node_##TYPE##__create(TYPE);\
+    Node_##TYPE* node_##TYPE##_create(TYPE);\
     Node_##TYPE* node_##TYPE##_destroy(Node_##TYPE*);\
     \
     typedef struct { \
@@ -33,8 +33,8 @@
 // ----------------------------
 // Macro para implementación
 // ----------------------------
-#define IMPLEMENT_LINKED_LIST(TYPE) \
-    Node_##TYPE* node_##TYPE##__create(TYPE data){\
+#define IMPLEMENT_CIRCULAR_LINKED_LIST(TYPE) \
+    Node_##TYPE* node_##TYPE##_create(TYPE data){\
         Node_##TYPE* new_node = malloc(sizeof(Node_##TYPE)); \
         new_node->data = data;\
         new_node->next = NULL;\
@@ -59,7 +59,10 @@
     void list_##TYPE##_destroy(List_##TYPE* list) { \
         if (!list) return; \
         Node_##TYPE* current = list->head; \
-        while (current) { \
+        Node_##TYPE* temp = current; \
+        current = current->next; \
+        free(temp); \
+        while (current && current != list->head) { \
             Node_##TYPE* temp = current; \
             current = current->next; \
             free(temp); \
@@ -71,7 +74,7 @@
         if (!list || pos > list->length) return false; \
         \
         Node_##TYPE* new_node = node_##TYPE##_create(data); \
-        if (!new_node) return false; \        
+        if (!new_node) return false; \
         \
         if (pos == 0) { \
             new_node->next = list->head; \
@@ -110,7 +113,8 @@
             to_delete = list->head; \
             list->head = list->head->next; \
             if (!list->head) list->tail = NULL; \
-        } else { \
+            list->tail->next = list->head; \
+        } else{ \
             Node_##TYPE* current = list->head; \
             for (size_t i = 0; i < pos - 1; ++i) { \
                 current = current->next; \
@@ -119,6 +123,7 @@
             current->next = to_delete->next; \
             if (pos == list->length - 1) { \
                 list->tail = current; \
+                list->tail->next = list->head; \
             } \
         } \
         \
@@ -166,9 +171,12 @@
         \
         printf("["); \
         Node_##TYPE* current = list->head; \
-        while (current) { \
+        print_fn(current->data); \
+        if (current->next && current->next != list->head) printf(", "); \
+            current = current->next; \
+        while (current && current != list->head) { \
             print_fn(current->data); \
-            if (current->next) printf(", "); \
+            if (current->next && current->next != list->head) printf(", "); \
             current = current->next; \
         } \
         printf("]\n"); \
@@ -178,7 +186,11 @@
         if (!list) return false; \
         \
         Node_##TYPE* current = list->head; \
-        while (current) { \
+        if (current->data == data) { \
+            return true; \
+        } \
+        current = current->next; \
+        while (current && current != list->head) { \
             if (current->data == data) { \
                 return true; \
             } \
@@ -213,6 +225,7 @@
                 return true; \
             } \
             \
+            if(current->next = list->head) return false; \
             prev = current; \
             current = current->next; \
         } \
@@ -231,7 +244,7 @@ DECLARE_CIRCULAR_LIST(float)
 // Implementación para tipos concretos
 // ----------------------------
 #ifdef CIRCULAR_LIST_IMPLEMENTATION
-IMPLEMent_CIRCULAR_LIST(int)
-IMPLEMENT_CIRCULAR_LIST(char)
-IMPLEMENT_CIRCULAR_LIST(float)
+IMPLEMENT_CIRCULAR_LINKED_LIST(int)
+IMPLEMENT_CIRCULAR_LINKED_LIST(char)
+IMPLEMENT_CIRCULAR_LINKED_LIST(float)
 #endif
